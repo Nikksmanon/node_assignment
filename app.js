@@ -14,7 +14,7 @@ app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
 
 let database, collection;
-// Setup Db connection 
+// Setup Db connection
 app.listen(5000, () => {
   MongoClient.connect(
     DATABASE_URL,
@@ -43,7 +43,15 @@ app.get("/authors", (req, res) => {
 // Create GET api to fetch authors who have greater than or equal to n awards
 app.get("/authors/awards/:n", (req, res) => {
   collection
-    .find({ awards: { $gte: parseInt(req.params.n) } })
+    .aggregate([
+      {
+        $project: {
+          name: "$name",
+          awards_count: { $size: { $ifNull: ["$awards", []] } },
+        },
+      },
+      { $match: { awards_count: { $gte: parseInt(req.params.n) } } },
+    ])
     .toArray((error, result) => {
       if (error) {
         return res.status(500).send(error);
@@ -53,9 +61,8 @@ app.get("/authors/awards/:n", (req, res) => {
 });
 // Create GET api to fetch authors who have won award where year >= y
 app.get("/authors/year/:y", (req, res) => {
-  console.log(new Date(req.params.y))  
   collection
-    .find({ year: { $gte: new Date(req.params.y).toISOString() } })
+    .find({ "awards.year": { $gte: parseInt(req.params.y) } })
     .toArray((error, result) => {
       if (error) {
         return res.status(500).send(error);
@@ -65,32 +72,22 @@ app.get("/authors/year/:y", (req, res) => {
 });
 // Create GET api to fetch total number of books sold and total profit by each author
 app.get("/checkout", (req, res) => {
-  booksCollection
+  collection
     .aggregate([
-      { $match: {} },
       {
         $lookup: {
-          from: "authors",
-          localField: "authorId",
-          foreignField: "_id",
-          as: "authors",
-        },
-      },
-      { $unwind: "$authors" },
-      {
-        $lookup: {
-          from: "prices",
+          from: "books",
           localField: "_id",
-          foreignField: "bookId",
-          as: "prices",
+          foreignField: "authorId",
+          as: "books",
         },
       },
-      { $unwind: "$prices" },
+      { $unwind: { path: "$books", preserveNullAndEmptyArrays: true } },
       {
         $group: {
-          _id: "$authors._id",
-          totalBooksSold: { $sum: "$booksSold" },
-          totalProfit: { $sum: { $multiply: ["$booksSold", "$prices.price"] } },
+          _id: "$_id",
+          totalBooksSold: { $sum: "$books.sold" },
+          totalProfit: { $sum: { $multiply: ["$books.price", "$books.sold"] } },
         },
       },
     ])
@@ -114,28 +111,38 @@ app.get("/filter", (req, res) => {
       },
     ],
   };
-  
+
   collection
     .aggregate([
       {
         $lookup: {
-          from: "prices",
+          from: "books",
           localField: "_id",
           foreignField: "authorId",
-          as: "prices",
+          as: "books",
         },
       },
-      { $unwind: "$prices" },
+      { $unwind: { path: "$books", preserveNullAndEmptyArrays: true } },
+
       {
         $group: {
           _id: "$_id",
-          totalPrice: { $sum: "$prices.price" },
-          birthDate: { $first: "$birthDate" },
+          totalPrice: { $sum: "$books.price" },
+          birthDate: { $first: "$birth" },
         },
       },
+
       {
         $match: query,
       },
+      {
+        $project: {
+          _id: "$_id",
+          birthDate: "$birthDate",
+          totalPrice: "$totalPrice",
+        },
+      },
+      { $sort: { _id: 1 } },
     ])
     .toArray((error, result) => {
       if (error) {
