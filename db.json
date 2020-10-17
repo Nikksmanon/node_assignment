@@ -1,0 +1,100 @@
+{
+    "dataArray": [
+      {
+        "label": "ATM",
+        "name": "home-outline",
+        "formData": [
+          {
+            "indexId": "1",
+            "label": "firstname",
+            "indexDesc": "First Name",
+            "htmlControlType": "textbox",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "2",
+            "label": "lastname",
+            "indexDesc": "Last Name",
+            "htmlControlType": "textbox",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "3",
+            "label": "address",
+            "indexDesc": "Address",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "4",
+            "label": "city",
+            "indexDesc": "Address",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "5",
+            "label": "pincode",
+            "indexDesc": "Address",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "6",
+            "label": "areacode",
+            "indexDesc": "Area",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "7",
+            "label": "location",
+            "indexDesc": "Location",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          }
+        ]
+      },
+      {
+        "name": "bookmark-outline",
+        "label": "NEFT",
+        "formData": [
+          {
+            "indexId": "1",
+            "label": "firstname",
+            "indexDesc": "First Name",
+            "htmlControlType": "textbox",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "2",
+            "label": "lastname",
+            "indexDesc": "Last Name",
+            "htmlControlType": "textbox",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "3",
+            "label": "address",
+            "indexDesc": "Address",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "4",
+            "label": "city",
+            "indexDesc": "Address",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          },
+          {
+            "indexId": "5",
+            "label": "ifsc",
+            "indexDesc": "ifcs",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
+          }
+        ]
+      }
+    ]
+  }
