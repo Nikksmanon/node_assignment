@@ -86,6 +86,13 @@
             "indexDesc": "Address",
             "htmlControlType": "textarea",
             "cssClassName": "form-control"
+          },
+          {
+            "indexId": "5",
+            "label": "ifsc",
+            "indexDesc": "ifcs",
+            "htmlControlType": "textarea",
+            "cssClassName": "form-control"
           }
         ]
       }
